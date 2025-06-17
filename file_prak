@@ -1,0 +1,33 @@
+INSERT INTO users (username, name, surname, passwd, autologin, autologout, lang, refresh, theme, rows_per_page, timezone, roleid)
+VALUES ('zabbix', 'zabbix', 'Administrator', '$2a$06$z08Mf.T78wEx60Q.4S2iWOLujKIzGPisnm7jQOxWY.O7cReoiBK0y', 1, 0, 'default', '30s', 'default', 50, 'default', 3);
+
+
+2
+
+systemctl restart zabbix_server.service
+
+3
+
+Шаги для обновления последовательности
+
+    Обновление последовательности:
+    Установите значение последовательности на 3, чтобы следующее значение, которое она будет генерировать, не конфликтовало с существующими userid:
+
+sql
+
+SELECT setval('users_userid_seq', 3);
+
+Вставка данных:
+Теперь попробуйте снова вставить данные:
+
+sql
+
+INSERT INTO users (username, name, surname, passwd, autologin, autologout, lang, refresh, theme, rows_per_page, timezone, roleid)
+VALUES ('zabbix', 'zabbix', 'Administrator', '$2a$06$z08Mf.T78wEx60Q.4S2iWOLujKIzGPisnm7jQOxWY.O7cReoiBK0y', 1, 0, 'default', '30s', 'default', 50, 'default', 3);
+
+Перезапуск сервера Zabbix:
+После успешного выполнения запроса не забудьте перезапустить сервер Zabbix:
+
+bash
+
+systemctl restart zabbix_server.service

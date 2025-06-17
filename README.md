@@ -39,27 +39,24 @@ systemctl restart postgresql
 Импорт схемы базы данных:
 
 bash
-Копировать
-Редактировать
+```
 psql -U zabbix -f /usr/share/doc/zabbix-common-database-pgsql-*/schema.sql zabbix
 psql -U zabbix -f /usr/share/doc/zabbix-common-database-pgsql-*/images.sql zabbix
 psql -U zabbix -f /usr/share/doc/zabbix-common-database-pgsql-*/data.sql zabbix
+```
 Установка Apache2
 bash
-Копировать
-Редактировать
+```
 apt-get install apache2 apache2-mod_php8.3
 systemctl enable --now httpd2
+```
 Установка PHP
 bash
-Копировать
-Редактировать
+```
 apt-get install php8.3 php8.3-mbstring php8.3-sockets php8.3-gd php8.3-xmlreader php8.3-pgsql php8.3-ldap php8.3-openssl
+```
 Изменения в /etc/php/8.3/apache2-mod_php/php.ini:
-
-ini
-Копировать
-Редактировать
+```
 memory_limit = 256M
 post_max_size = 32M
 max_execution_time = 600
@@ -67,57 +64,52 @@ max_input_time = 600
 date.timezone = Europe/Moscow
 always_populate_raw_post_data = -1
 bash
-Копировать
-Редактировать
+```
 systemctl restart httpd2
 Настройка и запуск Zabbix-сервера
 Файл: /etc/zabbix/zabbix_server.conf
-
-conf
-Копировать
-Редактировать
+```
 DBHost=localhost
 DBName=zabbix
 DBUser=zabbix
 DBPassword=<ВАШ_ПАРОЛЬ>
+```
 bash
-Копировать
-Редактировать
+```
 systemctl enable --now zabbix_pgsql
+```
 Установка веб-интерфейса Zabbix
 bash
-Копировать
-Редактировать
+```
 apt-get install zabbix-phpfrontend-apache2 zabbix-phpfrontend-php8.3
 ln -s /etc/httpd2/conf/addon.d/A.zabbix.conf /etc/httpd2/conf/extra-enabled/
 systemctl restart httpd2
 chown apache2:apache2 /var/www/webapps/zabbix/ui/conf
 Перейдите в браузере по адресу:
 http://<ip-сервера>/zabbix
-
+```
 Если возникает ошибка "доступ запрещен", добавьте Require all granted в файл /etc/httpd2/conf/sites-available/default.conf внутри секции <Directory>, и перезапустите Apache:
 
 bash
-Копировать
-Редактировать
+```
 systemctl restart httpd2
+```
 Установка клиента Zabbix
 bash
-Копировать
-Редактировать
+```
 apt-get install zabbix-agent
+```
 Файл конфигурации агента: /etc/zabbix/zabbix_agentd.conf
 
-conf
-Копировать
-Редактировать
+```
 Server=<ip-сервера>
 ServerActive=<ip-сервера>
 Hostname=comp01.example.test
+```
 bash
-Копировать
-Редактировать
+```
 systemctl enable --now zabbix_agentd.service
+```
 Добавление нового хоста на сервер Zabbix
 В веб-интерфейсе:
 
